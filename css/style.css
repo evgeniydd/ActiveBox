@@ -67,7 +67,7 @@ ul li {
 /* Banner */
 
 .banner {
-    background: url(../images/banner.jpg) center;
+    background: url(../images/banner.jpg) center top/cover no-repeat;
     min-height: 750px;
 
 }
