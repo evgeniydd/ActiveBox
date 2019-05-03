@@ -1,77 +1,66 @@
+
+// Header fixed scroll
+
+window.onscroll = function() {myFunction()};
+
+var header = document.getElementById("header");
+var sticky = header.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("fixed");
+  } else {
+    header.classList.remove("fixed");
+  }
+}
+
+
+
+// Page Scroll
+
+
+var linkNav = document.querySelectorAll('header [href^="#"]'), 
+    V = 0.5;
+
+    for (var i = 0; i < linkNav.length; i++) {
+    linkNav[i].addEventListener('click', function(e) {
+        e.preventDefault(); 
+        var w = window.pageYOffset,
+            hash = this.href.replace(/[^#]*(.*)/, '$1');
+        t = document.querySelector(hash).getBoundingClientRect().top,
+            start = null;
+
+        requestAnimationFrame(step);
+        
+        function step(time) {
+            if (start === null) start = time;
+            var progress = time - start,
+                r = (t < 0 ? Math.max(w - progress/V, w + t) : Math.min(w + progress/V, w + t));
+            window.scrollTo(0,r);
+            if (r != w + t) {
+                requestAnimationFrame(step)
+            } else {
+                location.hash = hash
+            }
+        }
+
+    }, false);
+}
+
+
+
+
+
+var nav = $('nav[role="navigation"]');
 $(document).ready(function() {
-  // Header Scroll
-  $(window).on('scroll', function() {
-    var scroll = $(window).scrollTop();
-
-    if (scroll >= 50) {
-      $('#header').addClass('fixed');
-    } else {
-      $('#header').removeClass('fixed');
-    }
-  });
-
-  // Waypoints
-  $('.work').waypoint(
-    function() {
-      $('.work').addClass('animated fadeIn');
-    },
-    {
-      offset: '75%'
-    }
-  );
-  $('.download').waypoint(
-    function() {
-      $('.download .btn').addClass('animated tada');
-    },
-    {
-      offset: '75%'
-    }
-  );
-
-  // Fancybox
-  $('.work-box').fancybox();
-
-  // Flexslider
-  $('.flexslider').flexslider({
-    animation: 'fade',
-    directionNav: false
-  });
-
-  // Page Scroll
-  var sections = $('section');
-  nav = $('nav[role="navigation"]');
-
-  $(window).on('scroll', function() {
-    var cur_pos = $(this).scrollTop();
-    sections.each(function() {
-      var top = $(this).offset().top - 76;
-      bottom = top + $(this).outerHeight();
-      if (cur_pos >= top && cur_pos <= bottom) {
-        nav.find('a').removeClass('active');
-        nav.find('a[href="#' + $(this).attr('id') + '"]').addClass('active');
-      }
+    $('.nav-toggle').on('click', function() {
+        $(this).toggleClass('close-nav');
+        nav.toggleClass('open');
+        return false;
+    });	
+    nav.find('a').on('click', function() {
+        $('.nav-toggle').toggleClass('close-nav');
+        nav.toggleClass('open');
     });
-  });
-  nav.find('a').on('click', function() {
-    var $el = $(this);
-    id = $el.attr('href');
-    $('html, body').animate(
-      {
-        scrollTop: $(id).offset().top - 75
-      },
-      500
-    );
-    return false;
-  });
 
-  // Mobile Navigation
-  $('.nav-toggle').on('click', function() {
-    $(this).toggleClass('close-nav');
-    nav.toggleClass('open');
-    return false;
-  });
-  nav.find('a').on('click', function() {
-    $('.nav-toggle').toggleClass('close-nav');
-    nav.toggleClass('open');
-  });
 });
